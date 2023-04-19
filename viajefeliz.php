@@ -18,12 +18,10 @@ Implementar un script testViaje.php que cree una instancia de la clase Viaje y p
 
  function cargarArray(){
     $arrayPasajeros = [];
-    $p1 = ["nombre"=>"pepe", "apellido"=>"martinez","DNI"=>123456];
-    $p2 = ["nombre"=>"papo", "apellido"=>"perez","DNI"=>123457];
-    $p3 = ["nombre"=>"pipa", "apellido"=>"dublre","DNI"=>123458];
-    $p4 = ["nombre"=>"popi", "apellido"=>"mark","DNI"=>123459];
-    $p5 = ["nombre"=>"popa", "apellido"=>"mendez","DNI"=>123460];
-    array_push($arrayPasajeros,$p1,$p2,$p3,$p4,$p5);
+    $p1 = new Pasajero("Fran","Ortiz",401288234,299634223);
+
+    $p2 = new Pasajero("Marco", "Raise", 234234234, 299235375);
+    array_push($arrayPasajeros,$p1,$p2);
     return $arrayPasajeros;
  }
 
@@ -86,8 +84,8 @@ function crearViaje($viajes){
     $numEmpleado = trim(fgets(STDIN));
     echo "Ingrese su num de licencia";
     $numLicencia = trim(fgets(STDIN));
-    $Responsable = new ResponsableViaje($numEmpleado,$numLicencia,$nombreYApellido);
-    $v1 = new Viaje ($cod, $destino, $cantMax, $arrayPsjs, $Responsable);
+    $responsable = new ResponsableViaje($numEmpleado,$numLicencia,$nombreYApellido);
+    $v1 = new Viaje ($cod, $destino, $cantMax, $arrayPsjs, $responsable);
     
     $arrayDeViajes[$pos] = $v1;
     return $arrayDeViajes;
@@ -250,6 +248,12 @@ public function getNombreYApellido(){
 public function setNombreYApellido($nom){
     $this->nombreYApellido = $nom;
 }
+public function __toString(){
+    $txt = "Nombre y Apellido :".$this->getNombreYApellido()."\n
+    N° licencia: ".$this->getNumLicencia()."\n
+    N° empleado: ".$this->getNumEmpleado();
+    return $txt;
+}
 }
  //Clase Viaje;
 class Viaje{
@@ -257,10 +261,10 @@ class Viaje{
     private $codigo;
     private $destino;
     private $cant_Max_Pjs;
-    private $pasajeros = [];
+    private $pasajeros;
     private $responsableViaje;
     //metodo constructor, recibe datos desde el test
-    public function __construct($codigo, $destino, $cant, $pasajeros,$responsable){
+    public function __construct($codigo, $destino, $cant,$pasajeros,$responsable){
         $this-> codigo = $codigo;
         $this-> destino = $destino;
         $this -> cant_Max_Pjs = $cant;
@@ -274,7 +278,7 @@ class Viaje{
         return $this->responsableViaje;
     }
     public function setResponsable($responsable){
-        $this->resposableViaje = $responsable;
+        $this->responsableViaje = $responsable;
     }
     public function getCodigo(){
         return $this->codigo;
@@ -302,13 +306,16 @@ class Viaje{
     }
     //retorna el string a mostrar en __toString()
     public function cargarString(){
+        
+        $p="";
         $s = "codigo de viaje: ".$this->codigo."\n". " destino: ".$this->destino."\n". " cantidad máxima de pasajeros: ".$this->cant_Max_Pjs."\n";
         $cant_P = count($this->pasajeros);
-        $r="Responsable del viaje: ".$this->resposableViaje.getNombreYApellido()." 
-        \n \t empleado n° ".$this->responsableViaje.getNumEmpleado()." 
-        \n \t matrícula n° ".$this->responsableViaje.getNumLicencia()."\n";
+        $r="Responsable del viaje: ".$this->responsableViaje->getNombreYApellido()." 
+        \n \t empleado n° ".$this->responsableViaje->getNumEmpleado()." 
+        \n \t matrícula n° ".$this->responsableViaje->getNumLicencia()."\n";
         for ($i=0;$i<$cant_P;$i++){
-            $p = $p. "pasajero ".$i+1 ." DNI: ".$this->pasajeros[$i]["DNI"]." nombre " .$this->pasajeros[$i]["nombre"]." ".$this->pasajeros[$i]["apellido"]."\n";
+            $pasaje=$this->getPasajeros()[$i];
+            $p = $p. "pasajero ".$i+1 ." DNI: ".$pasaje->getNumDocumento()." nombre " .$pasaje->getNombre()." ".$pasaje->getApellido()."\n";
         }
         $s = $s.$r.$p;
         return $s;
@@ -320,5 +327,54 @@ class Viaje{
     }
 
 }
+ //clase Pasajero pasajeros sean un objeto que tenga los atributos
+ // nombre, apellido, numero de documento y teléfono
+class Pasajero{
+    private $nombre;
+    private $apellido;
+    private $numDocumento;
+    private $telefono;
+
+    public function __construct($nombre,$apellido,$numDocumento,$telefono){
+
+        $this->nombre=$nombre;
+        $this->apellido= $apellido;
+        $this-> numDocumento = $numDocumento;
+        $this->telefono = $telefono;
+
+    }
+    //gets y sets
+    public function getNombre(){
+        return $this->nombre;
+    }
+    public function setNombre($nombre){
+        $this->nombre=$nombre;
+    }
+    //gets y sets
+    public function getApellido(){
+        return $this->apellido;
+    }
+    public function setApellido($apellido){
+        $this->apellido=$apellido;
+    }
+    //gets y sets
+    public function getNumDocumento(){
+        return $this->numDocumento;
+    }
+    public function setDocumento($documento){
+        $this->numDocumento=$documento;
+    }
+    //gets y sets
+    public function getTelefono(){
+        return $this->telefono;
+    }
+    public function setTelefono($tel){
+        $this->telefono=$tel;
+    }
+
+
+
+}
+
 
 ?>
