@@ -24,7 +24,7 @@ Implementar un script testViaje.php que cree una instancia de la clase Viaje y p
     array_push($arrayPasajeros,$p1,$p2);
     return $arrayPasajeros;
  }
-
+//
     function mostrarViajeCod($arrayDeViajes){
         $cant = count($arrayDeViajes);
         if ($cant>0){
