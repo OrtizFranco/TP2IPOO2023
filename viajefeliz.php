@@ -80,8 +80,15 @@ function crearViaje($viajes){
     $destino=trim(fgets(STDIN));
     echo "Ingrese la cantidad máxima de pasajeros del viaje \n";
     $cantMax=trim(fgets(STDIN));
-    $v1 = new Viaje ($cod, $destino, $cantMax, $arrayPsjs);
-    echo $pos;
+    echo "Ingrese el nombre y apellido del chofer";
+    $nombreYApellido=trim(fgets(STDIN));
+    echo "Ingrese su numero de empleado";
+    $numEmpleado = trim(fgets(STDIN));
+    echo "Ingrese su num de licencia";
+    $numLicencia = trim(fgets(STDIN));
+    $Responsable = new ResponsableViaje($numEmpleado,$numLicencia,$nombreYApellido);
+    $v1 = new Viaje ($cod, $destino, $cantMax, $arrayPsjs, $Responsable);
+    
     $arrayDeViajes[$pos] = $v1;
     return $arrayDeViajes;
 }
@@ -211,7 +218,7 @@ function crearViaje($viajes){
 }
 
 //clase responsableV
-class ResposableViaje{
+class ResponsableViaje{
    // número de empleado, número de licencia, nombre y apellido
    private $numEmpleado;
    private $numLicencia;
@@ -297,11 +304,13 @@ class Viaje{
     public function cargarString(){
         $s = "codigo de viaje: ".$this->codigo."\n". " destino: ".$this->destino."\n". " cantidad máxima de pasajeros: ".$this->cant_Max_Pjs."\n";
         $cant_P = count($this->pasajeros);
-        $p="";
+        $r="Responsable del viaje: ".$this->resposableViaje.getNombreYApellido()." 
+        \n \t empleado n° ".$this->responsableViaje.getNumEmpleado()." 
+        \n \t matrícula n° ".$this->responsableViaje.getNumLicencia()."\n";
         for ($i=0;$i<$cant_P;$i++){
             $p = $p. "pasajero ".$i+1 ." DNI: ".$this->pasajeros[$i]["DNI"]." nombre " .$this->pasajeros[$i]["nombre"]." ".$this->pasajeros[$i]["apellido"]."\n";
         }
-        $s = $s.$p;
+        $s = $s.$r.$p;
         return $s;
     }
     // al hacer echo muestra los atributos de la clase
